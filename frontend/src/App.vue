@@ -35,13 +35,20 @@ export default {
   name: "App",
   methods:{
     toFinancing(){
-      this.$router.push('/Financing');
+      if(this.$route.path != '/Financing'){
+        this.$router.push('/Financing');
+      }
+      
     },
     toMyFinancing(){
-      this.$router.push('/MyFinancing');
+      if(this.$route.path != '/MyFinancing'){
+        this.$router.push('/MyFinancing');
+      }
     },
     toRunning(){
-      this.$router.push('/Running');
+     if(this.$route.path != '/Running'){
+        this.$router.push('/Running');
+      }
     }
 
   }
