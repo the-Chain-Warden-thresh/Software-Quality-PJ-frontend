@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import Financing from '@/components/Financing'
+import MyFinancing from '@/components/MyFinancing'
+import Running from '@/components/Running'
 import store from '../store'
 import {Message} from 'element-ui';
 
@@ -10,21 +13,38 @@ Vue.use(Router);
 export const router = new Router({
   routes: [
     {
+      path: '/',
+      redirect: '/login'
+    },
+    {
       path: '/login',
       name: 'Login',
       component: Login,
-      // meta: {
-      //   tag: "logged"
-      // }
     }, 
     {
       path: '/register',
       name: 'Register',
       component: Register,
+    },
+    {
+      path: '/Financing',
+      name: 'Financing',
+      component: Financing,
       // meta: {
       //   tag: "logged"
       // }
     },
+    {
+      path: '/MyFinancing',
+      name: 'MyFinancing',
+      component: MyFinancing,
+
+    },
+    {
+      path: '/Running',
+      name: 'Running',
+      component: Running,
+    }
   ]
 })
 
