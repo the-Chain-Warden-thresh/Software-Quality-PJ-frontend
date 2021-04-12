@@ -3,11 +3,6 @@
     <el-header style="height: 20%;padding-left: 5em;">
       <el-row style="background-color: white">
         <el-col :span="21">
-          <p
-            style="margin: 0;padding-top: 2%;text-align: left;background-color: white;font-size: 30px;font-weight: bold;">
-            Your Personal Information</p>
-          <p style="margin: 0;padding:1% 0;text-align: left;background-color: white;">Your can check <strong>your personal
-            information</strong> in the following table, and you may <strong>edit some of them</strong> in our later edition.</p>
         </el-col>
         <el-col :span="3">
           <el-popover placement="bottom" v-model="visible">
@@ -16,9 +11,6 @@
               <el-button size="mini" @click="visible=false">No</el-button>
               <el-button type="primary" size="mini" @click="logout">Yes</el-button>
             </el-row>
-            <el-button plain slot="reference" style="margin-top: 30px">
-              Log out
-            </el-button>
           </el-popover>
         </el-col>
       </el-row>
@@ -77,7 +69,7 @@
               align="center" width="240px">
                   <template slot-scope="scope">
                     <el-button type="primary" @click="openDialog(scope.$index)">部分还款</el-button>
-                    <el-button type="primary">全额还款</el-button>
+                    <el-button type="primary" @click="payFullLoan(scope.$index)">全额还款</el-button>
                   </template>
 
               </el-table-column>
@@ -86,13 +78,13 @@
         </el-collapse-item>
       </el-collapse>
     </el-main>
-    <el-footer style="text-align: center;height:10%;padding-top: 20px">Copyright © 2020 还没名字</el-footer>
 
     <el-dialog
       title="部分还款"
       :visible.sync="dialogVisible"
       width="30%"
       append-to-body
+      @close="form.payment=''"
       >
       <el-form :model="form">
 
@@ -114,31 +106,7 @@
       data() {
         return {
           activeName: '1',
-          tableData:[{
-            created_time:'2021-04-11',
-            payment:500,
-            repay_cycle:30,
-            due_date:'2021-04-20',
-            next_overdue_date:'2021-04-15',
-            left_payment:150,
-            left_fine:0
-          },{
-            created_time:'2021-04-11',
-            payment:500,
-            repay_cycle:30,
-            due_date:'2021-04-20',
-            next_overdue_date:'2021-04-15',
-            left_payment:150,
-            left_fine:0
-          },{
-            created_time:'2021-04-11',
-            payment:500,
-            repay_cycle:30,
-            due_date:'2021-04-20',
-            next_overdue_date:'2021-04-15',
-            left_payment:150,
-            left_fine:0
-          }],
+          tableData:[],
           visible:false,
           dialogVisible: false,
           form:{
@@ -151,6 +119,44 @@
         payPartialLoan(){
           this.dialogVisible = false;
           console.log(this.form.payment,this.line)
+          this.$axios.post('/bts/loan/repay',{
+            loan_record_id:this.tableData[this.line].loan_record_id,
+            repay:this.form.payment
+          }).then(resp=>{
+            if(resp.status===200){
+              console.log('success!');
+              this.$message({
+                message:'还款成功',
+                type:'success'
+              });
+              location.reload();
+            }
+          }).catch(error=>{
+              if(error==='too much repay'){
+                this.$message({
+                  message:'部分还款金额不可大于全额还款',
+                  type:'error'
+                })
+              }else{
+                this.$message({
+                  message:'请输入数字！',
+                  type:'error'
+                })
+              }
+
+          })
+        },payFullLoan(index){
+          this.line=index;
+          this.$axios.post('/bts/loan/repay',{
+            loan_record_id: this.tableData[this.line].loan_record_id,
+            repay:this.tableData[this.line].left_payment+this.tableData[this.line].left_fine
+          }).then(resp=>{
+            this.$message({
+              message:'还款成功',
+              type:'success'
+            });
+            location.reload()
+          })
         },logout() {
           this.$message({
             message: 'Successful logout!',
@@ -162,14 +168,27 @@
         openDialog(index){
           this.dialogVisible = true;
           this.line=index;
+        //   this.$axios.get('/bts/customer/query_by_id_number?id_number=330888855550001').then(resp=>{
+        //   })
         }
+      },beforeMount() {
+        this.$axios.get('/bts/loan/query_by_customer_id?customer_id='+this.$store.state.customer_id).then(resp=>{
+          // this.tableData=resp.data;
+          let length=resp.data.length;
+          let i;
+          for(i=0;i<length;i++){
+            if(resp.data[i].left_payment!==0){
+              this.tableData.push(resp.data[i])
+            }
+          }
+        })
       }
     }
 </script>
 
 <style scoped>
   #base_action {
-    background: url("../assets/background/newbackground.jpg") no-repeat center;
+    /*background: url("../assets/background/newbackground.jpg") no-repeat center;*/
     height: 100%;
     width: 100%;
     background-size: cover;
