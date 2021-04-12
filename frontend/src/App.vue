@@ -18,7 +18,7 @@
                   <el-button size="mini" type="text" @click="visible = false"
                     >取消</el-button
                   >
-                  <el-button type="primary" size="mini" @click="toSetCustomer()" 
+                  <el-button type="primary" size="mini" @click="toSetCustomer()"
                     >确定</el-button
                   >
                 </div>
@@ -41,7 +41,7 @@
             <el-menu-item index="1-1" @click="route('/Action')"
               >贷款账户管理</el-menu-item
             >
-            <el-menu-item index="1-2">日终结算</el-menu-item>
+            <el-menu-item index="1-2" @click="route('/dailySettle')">日终结算</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title"
@@ -79,10 +79,10 @@ export default {
   name: "App",
   methods: {
     toSetCustomer(){
-      
+
         this.$router.push('/SetCustomer');
         this.$store.commit('removeCustomer');
-    
+
     },
     route(path) {
       if (this.$route.path != path) {

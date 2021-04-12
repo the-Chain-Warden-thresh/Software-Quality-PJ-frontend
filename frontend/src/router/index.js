@@ -9,6 +9,7 @@ import Running from '@/components/Running'
 import SetCustomer from '@/components/SetCustomer'
 import store from '../store'
 import {Message} from 'element-ui';
+import DailySettle from "../components/DailySettle";
 
 Vue.use(Router);
 
@@ -57,6 +58,10 @@ export const router = new Router({
       path: '/Running',
       name: 'Running',
       component: Running,
+    },{
+    path:'/dailySettle',
+      name:'DailySettle',
+      component:DailySettle
     }
   ]
 })
