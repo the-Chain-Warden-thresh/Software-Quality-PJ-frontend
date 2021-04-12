@@ -108,7 +108,6 @@ export default {
       (myDate.getMonth() + 1) +
       "-" +
       myDate.getDate();
-    console.log(date);
     this.$axios
       .get(
         "/bts/investment/get_customer_credit?customer_id=" +

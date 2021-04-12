@@ -3,8 +3,8 @@
     <el-header style="height: 20%;padding-left: 5em;">
       <p style="margin: 0;padding-top: 2%;text-align: left;background-color: white;font-size: 30px;font-weight: bold;">
         Login in to BTS</p>
-      <p style="margin: 0;padding:1% 0px;text-align: left;background-color: white;">IHospitalMS uses cookies for user
-        authentication. To use BTS, you should allow your browser to save cookies from ihospitalms.org.</p>
+      <p style="margin: 0;padding:1% 0px;text-align: left;background-color: white;">BTS uses cookies for user
+        authentication. To use BTS, you should allow your browser to save cookies from BTS.org.</p>
     </el-header>
     <el-form :model="loginForm"
              :rules="rules"
