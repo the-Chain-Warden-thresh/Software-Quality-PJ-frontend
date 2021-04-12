@@ -73,7 +73,7 @@ export default {
               message: "客户身份确认",
               type: "success",
             });
-            this.$store.commit("setCustomer", customerForm);
+            this.$store.commit("setCustomer", resp.data);
             this.$router.push("/Action");
           }
         })

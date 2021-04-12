@@ -7,7 +7,8 @@ export default new Vuex.Store(
   state: {
     token: localStorage.getItem('token') || null,
     username:localStorage.getItem('username')||null,
-    ID: localStorage.getItem('ID')||null,
+    id_number: localStorage.getItem('id_number')||null,
+    customer_id: localStorage.getItem('customer_id')||null,
 
   //  authorities:JSON.parse(localStorage.getItem('authorities'))||null,
 
@@ -34,19 +35,25 @@ export default new Vuex.Store(
       state.username=data.username
     },
     setCustomer(state,data){
-      localStorage.setItem('ID', data.ID);
-      state.ID = data.ID;
+      localStorage.setItem('id_number', data.id_number);
+      localStorage.setItem('customer_id', data.customer_id);
+      state.id_number = data.id_number;
+      state.customer_id = data.customer_id;
     },
     removeCustomer(state){
-      localStorage.removeItem('ID');
-      state.ID=null;
+      localStorage.removeItem('id_number');
+      localStorage.removeItem('customer_id');
+      state.id_number=null;
+      state.customer_id=null;
     },
     logout(state) {
       // 移除token
       localStorage.removeItem('token');
       localStorage.removeItem('username');
-      localStorage.removeItem('ID');
-      state.ID=null;
+      localStorage.removeItem('id_number');
+      localStorage.removeItem('customer_id');
+      state.id_number=null;
+      state.customer_id=null;
       state.token = null;
       state.username = null;
     },

@@ -6,7 +6,7 @@
           <el-col :span="6"
             ><img id="image" src="../src/assets/customer.jpg"
           /></el-col>
-          <el-col :span="18" v-if="this.$store.state.ID"
+          <el-col :span="18" v-if="this.$store.state.id_number"
             ><div id="ID">
               <el-popover
                 placement="top-start"
@@ -23,12 +23,12 @@
                   >
                 </div>
                 <el-button type="text" slot="reference">{{
-                  this.$store.state.ID
+                  this.$store.state.id_number
                 }}</el-button>
               </el-popover>
             </div></el-col
           >
-          <el-col :span="18" v-if="!this.$store.state.ID"
+          <el-col :span="18" v-if="!this.$store.state.id_number"
             ><div id="ID">未输入客户</div></el-col
           >
         </el-row>

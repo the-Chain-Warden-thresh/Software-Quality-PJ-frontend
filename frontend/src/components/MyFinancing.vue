@@ -66,7 +66,6 @@
         </el-table>
       </el-tab-pane>
     </el-tabs>
-
   </div>
 </template>
 
@@ -75,12 +74,11 @@ export default {
   name: "Financing",
   data() {
     return {
-
       loading: false,
       activeName: "ftfp",
-      myFtfp:[],
-      myFoundation:[],
-      myShares:[],
+      myFtfp: [],
+      myFoundation: [],
+      myShares: [],
       tableData: [
         {
           date: "2016-05-02",
@@ -105,6 +103,27 @@ export default {
       ],
     };
   },
+  beforeMount() {
+    this.$axios
+      .get(
+        "/bts/investment/get_customer_credit?customer_id=" +
+          this.$store.state.customer_id
+      )
+      .then((resp) => {
+        console.log(resp);
+        if (resp.status === 200) {
+          console.log(resp);
+        }
+      })
+      .catch((error) => {
+        this.$message({
+          message: error,
+          type: "error",
+          showClose: true,
+          duration: 0,
+        });
+      });
+  },
   methods: {
     test(index) {
       console.log(index);
@@ -123,7 +142,5 @@ export default {
   background-size: cover;
   position: fixed;
 }
-
-
 </style>
 
