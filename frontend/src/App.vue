@@ -1,14 +1,14 @@
 <template>
   <div id="app">
     <el-container>
-      <el-aside width="300px">
+      <el-aside width="300px"  v-if="this.$store.state.token">
         <el-menu :default-openeds="['1', '2', '3']">
           <el-submenu index="1">
             <template slot="title"
               ><i class="el-icon-message"></i>贷款业务</template
             >
-            <el-menu-item index="1-1">选项1</el-menu-item>
-            <el-menu-item index="1-2">选项2</el-menu-item>
+            <el-menu-item index="1-1" @click="toAction()">贷款账户管理</el-menu-item>
+            <el-menu-item index="1-2">日终结算</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-data-line"></i>账户流水</template>
@@ -34,6 +34,11 @@
 export default {
   name: "App",
   methods:{
+    toAction(){
+       if(this.$route.path != '/Action'){
+        this.$router.push('/Action');
+      }
+    },
     toFinancing(){
       if(this.$route.path != '/Financing'){
         this.$router.push('/Financing');

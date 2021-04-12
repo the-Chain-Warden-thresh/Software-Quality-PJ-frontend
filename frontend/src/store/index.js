@@ -5,7 +5,6 @@ Vue.use(Vuex)
 export default new Vuex.Store(
   {
   state: {
-    admin:localStorage.getItem('admin') || false,
     token: localStorage.getItem('token') || null,
     username:localStorage.getItem('username')||null,
     fullName:localStorage.getItem('fullName')||null,
@@ -37,6 +36,7 @@ export default new Vuex.Store(
     },
     setUserDetails(state,data){
       // localStorage.setItem('username',data.username);
+
       // localStorage.setItem('email',data.email);
       // localStorage.setItem('office',data.office);
       // localStorage.setItem('fullName',data.fullName);
@@ -46,10 +46,10 @@ export default new Vuex.Store(
       // state.office=data.office;
       // state.fullName=data.fullName;
       // state.region=data.region[data.region.length-1];
-      localStorage.setItem('authorities',JSON.stringify(data.authorities));
-      state.authorities=data.authorities;
-      localStorage.setItem('information',data.information);
-      state.information=data.information;
+      // localStorage.setItem('authorities',JSON.stringify(data.authorities));
+      // state.authorities=data.authorities;
+      // localStorage.setItem('information',data.information);
+      // state.information=data.information;
       localStorage.setItem('username',data.username);
       state.username=data.username
     },
@@ -57,26 +57,8 @@ export default new Vuex.Store(
       // 移除token
       localStorage.removeItem('token');
       localStorage.removeItem('username');
-      localStorage.removeItem('email');
-      localStorage.removeItem('office');
-      localStorage.removeItem('admin');
-      localStorage.removeItem('selectedConference');
-      localStorage.removeItem('conferences');
-      localStorage.removeItem('fullName');
-      localStorage.removeItem('region');
-      localStorage.removeItem('thesisID');
-     // localStorage.removeItem('authorities');
       state.token = null;
       state.username = null;
-      state.email=null;
-      state.office=null;
-      state.admin=false;
-      state.selectedConference=null;
-      state.conferences=null;
-      state.region=null;
-      state.fullName=null;
-      state.thesisID=null;
-     // state.authorities=null;
     },
     //type:String  chair:1  PC:2 author:3 contribution:4
     setSelectedConference(state,data){

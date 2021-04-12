@@ -2,9 +2,9 @@
   <div id="base_login">
     <el-header style="height: 20%;padding-left: 5em;">
       <p style="margin: 0;padding-top: 2%;text-align: left;background-color: white;font-size: 30px;font-weight: bold;">
-        Login in to IHospitalMS</p>
+        Login in to BTS</p>
       <p style="margin: 0;padding:1% 0px;text-align: left;background-color: white;">IHospitalMS uses cookies for user
-        authentication. To use IHospitalMS, you should allow your browser to save cookies from ihospitalms.org.</p>
+        authentication. To use BTS, you should allow your browser to save cookies from ihospitalms.org.</p>
     </el-header>
     <el-form :model="loginForm"
              :rules="rules"
@@ -84,46 +84,23 @@
               },{headers: {'Content-Type': 'application/json'}}
             )
               .then(resp => {
-                console.log('success')
-                // if (resp.status === 200 && resp.headers.hasOwnProperty("token")) {
-                //   this.$message({
-                //     message: 'Successful log in!',
-                //     type: "success"
-                //   });
-                //   console.log(resp);
-                //
-                //   const position=resp.data.authorities[0].authority;
-                //   if(position==="doctor"){
-                //     this.$router.push('/Doctor')
-                //   }
-                //   if(position==="emergencyNurse"){
-                //     this.$router.push('/EmergencyNurse')
-                //   }
-                //   if(position==="matron"){
-                //     this.$router.push('/Matron')
-                //   }
-                //   if(position==="wardNurse"){
-                //     this.$router.push('/WardNurse')
-                //   }
-                //   console.log(resp.data.authorities[0].authority);
-                //   this.$store.commit('login', resp.headers);
-                //   this.$store.commit('setUserDetails', resp.data);
-                //   // if (resp.data.authorities.length > 0 && resp.data.authorities[0].authority === "Admin") {
-                //   //   this.$store.commit('setAdmin');
-                //   //   this.$router.push('/ManagerAssessment');
-                //   //
-                //   // } else {
-                //   //   this.$router.push('/personalInformation');
-                //   // }
-                // } else {
-                //   this.$message({
-                //     message: 'Login failed, please try again later!',
-                //     type: "error",
-                //     showClose: true,
-                //     duration: 0,
-                //   });
-                //   this.$store.commit('logout');
-                // }
+                if (resp.status === 200 ) {
+                  this.$message({
+                    message: 'Successful log in!',
+                    type: "success"
+                  });
+                   this.$store.commit('login', resp.data);
+                  this.$store.commit('setUserDetails', resp.data);
+                  this.$router.push('/Action');
+                } else {
+                  this.$message({
+                    message: 'Login failed, please try again later!',
+                    type: "error",
+                    showClose: true,
+                    duration: 0,
+                  });
+                  this.$store.commit('logout');
+                }
               })
               .catch(error => {
                 this.$message({
