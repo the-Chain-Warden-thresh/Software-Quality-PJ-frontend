@@ -6,6 +6,7 @@ import Action from '@/components/Action'
 import Financing from '@/components/Financing'
 import MyFinancing from '@/components/MyFinancing'
 import Running from '@/components/Running'
+import SetCustomer from '@/components/SetCustomer'
 import store from '../store'
 import {Message} from 'element-ui';
 
@@ -13,6 +14,10 @@ Vue.use(Router);
 
 export const router = new Router({
   routes: [
+    {
+      path:'/SetCustomer',
+      component: SetCustomer
+    },
     {
       path: '/',
       redirect: '/login'

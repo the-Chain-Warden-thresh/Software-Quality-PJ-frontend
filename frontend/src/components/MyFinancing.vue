@@ -66,9 +66,7 @@
         </el-table>
       </el-tab-pane>
     </el-tabs>
-    <el-footer style="text-align: center; height: 5%"
-      >Copyright © 2021
-    </el-footer>
+
   </div>
 </template>
 

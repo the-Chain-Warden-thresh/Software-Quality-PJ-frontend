@@ -7,16 +7,10 @@ export default new Vuex.Store(
   state: {
     token: localStorage.getItem('token') || null,
     username:localStorage.getItem('username')||null,
-    fullName:localStorage.getItem('fullName')||null,
-    email:localStorage.getItem('email'||null),
-    office:localStorage.getItem('office')||null,
-    region:localStorage.getItem('region')||null,
-    selectedConference:JSON.parse(localStorage.getItem('selectedConference'))||null,
+    ID: localStorage.getItem('ID')||null,
+
   //  authorities:JSON.parse(localStorage.getItem('authorities'))||null,
-    conferences:JSON.parse(localStorage.getItem('conferences'))||null,
-    thesisID:localStorage.getItem('thesisID')||null,
-    authorities:JSON.parse(localStorage.getItem('authorities'))||null,
-    information:localStorage.getItem('information')||null
+
 
 
 
@@ -35,28 +29,24 @@ export default new Vuex.Store(
       state.token = data.token
     },
     setUserDetails(state,data){
-      // localStorage.setItem('username',data.username);
-
-      // localStorage.setItem('email',data.email);
-      // localStorage.setItem('office',data.office);
-      // localStorage.setItem('fullName',data.fullName);
-      // localStorage.setItem('region',data.region[data.region.length-1]);
-      // state.username=data.username;
-      // state.email=data.email;
-      // state.office=data.office;
-      // state.fullName=data.fullName;
-      // state.region=data.region[data.region.length-1];
-      // localStorage.setItem('authorities',JSON.stringify(data.authorities));
-      // state.authorities=data.authorities;
-      // localStorage.setItem('information',data.information);
-      // state.information=data.information;
+  
       localStorage.setItem('username',data.username);
       state.username=data.username
+    },
+    setCustomer(state,data){
+      localStorage.setItem('ID', data.ID);
+      state.ID = data.ID;
+    },
+    removeCustomer(state){
+      localStorage.removeItem('ID');
+      state.ID=null;
     },
     logout(state) {
       // 移除token
       localStorage.removeItem('token');
       localStorage.removeItem('username');
+      localStorage.removeItem('ID');
+      state.ID=null;
       state.token = null;
       state.username = null;
     },

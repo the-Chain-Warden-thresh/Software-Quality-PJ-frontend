@@ -44,7 +44,7 @@
         </el-button>
       </el-form-item>
     </el-form>
-    <el-footer style="text-align: center;height:5% ">Copyright © 2021 FDU18SS YHT&LCH</el-footer>
+    <el-footer style="text-align: center;height:5% ">Copyright © 2021 FDU18SS </el-footer>
   </div>
 
 </template>
@@ -74,6 +74,9 @@
         loading: false
       }
     },
+    beforeMount(){
+        this.$store.commit('logout');
+    },
     methods: {
       login(formName) {
         this.$refs[formName].validate(valid => {
@@ -91,7 +94,7 @@
                   });
                    this.$store.commit('login', resp.data);
                   this.$store.commit('setUserDetails', resp.data);
-                  this.$router.push('/Action');
+                  this.$router.push('/SetCustomer');
                 } else {
                   this.$message({
                     message: 'Login failed, please try again later!',

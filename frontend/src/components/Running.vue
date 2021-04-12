@@ -16,9 +16,7 @@
 
     </el-header>
 
-    <el-footer style="text-align: center; height: 5%"
-      >Copyright © 2021
-    </el-footer>
+
   </div>
 </template>
 
