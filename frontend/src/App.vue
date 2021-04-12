@@ -85,7 +85,7 @@ export default {
     
     },
     route(path) {
-      if (this.$route.path != path) {
+      if (this.$route.path != path && this.$route.path != '/SetCustomer') {
         this.$router.push(path);
       }
     },

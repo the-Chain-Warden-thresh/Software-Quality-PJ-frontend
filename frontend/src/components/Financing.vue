@@ -23,7 +23,7 @@
           font-size: 18px;
         "
       >
-        当前信用评级
+        当前信用评级: {{ this.creditLevel }}
       </p>
       <p
         style="
@@ -40,17 +40,25 @@
     </el-header>
     <el-tabs v-model="activeName">
       <el-tab-pane label="定期理财产品" name="ftfp">
-        <el-table :data="tableData" border style="width: 100%">
-          <el-table-column prop="date" label="日期"> </el-table-column>
-          <el-table-column prop="name" label="姓名" width="180">
+        <el-table :data="ftfp" border style="width: 100%">
+          <el-table-column
+            prop="regular_deposit_id"
+            label="产品代号"
+          ></el-table-column>
+          <el-table-column prop="regular_deposit_name" label="产品名称">
           </el-table-column>
-          <el-table-column prop="address" label="购买时长(天)" width="180">
+          <el-table-column prop="issue_date" label="发行日期">
+          </el-table-column>
+          <el-table-column prop="return_cycle" label="周期（天）">
+          </el-table-column>
+          <el-table-column prop="return_rate" label="利率"> </el-table-column>
+          <el-table-column  label="购买金额" width="180">
             <template slot-scope="props">
               <el-input-number
                 size="small"
                 :min="0"
                 placeholder="0"
-                v-model="ftfpNum[props.$index]"
+                v-model="ftfpAmount[props.$index]"
               ></el-input-number>
             </template>
           </el-table-column>
@@ -61,7 +69,7 @@
                 icon="el-icon-s-goods"
                 @onConfirm="buyFtfp(props.$index)"
               >
-                <el-button slot="reference" :disabled="!ftfpNum[props.$index]"
+                <el-button slot="reference" :disabled="!ftfpAmount[props.$index]"
                   >购买</el-button
                 >
               </el-popconfirm>
@@ -69,18 +77,31 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="基金" name="foundation">
-        <el-table :data="tableData" border style="width: 100%">
-          <el-table-column prop="date" label="日期"> </el-table-column>
-          <el-table-column prop="name" label="姓名" width="180">
+      <el-tab-pane label="基金" name="foundation" v-if="this.creditLevel <= 2">
+        <el-table :data="foundation" border style="width: 100%">
+          <el-table-column prop="fund_id" label="基金代号"> </el-table-column>
+          <el-table-column prop="fund_name" label="基金名称"> </el-table-column>
+          <el-table-column prop="issue_date" label="发行日期">
           </el-table-column>
-          <el-table-column prop="address" label="购买时长(天)" width="180">
+          <el-table-column prop="issue_price" label="发行价格">
+          </el-table-column>
+          <el-table-column label="购买时长（天）" width="180">
             <template slot-scope="props">
               <el-input-number
                 size="small"
                 :min="0"
                 placeholder="0"
                 v-model="foundationNum[props.$index]"
+              ></el-input-number>
+            </template>
+          </el-table-column>
+          <el-table-column label="购买金额" width="180">
+            <template slot-scope="props">
+              <el-input-number
+                size="small"
+                :min="0"
+                placeholder="0"
+                v-model="foundationAmount[props.$index]"
               ></el-input-number>
             </template>
           </el-table-column>
@@ -91,22 +112,26 @@
                 icon="el-icon-s-goods"
                 @onConfirm="buyFoundation(props.$index)"
               >
-              <el-button slot="reference"
-               
-                :disabled="!foundationNum[props.$index]"
-                >购买</el-button
-              >
+                <el-button
+                  slot="reference"
+                  :disabled="!foundationNum[props.$index]||!foundationAmount[props.$index]"
+                  >购买</el-button
+                >
               </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="股票" name="shares">
-        <el-table :data="tableData" border style="width: 100%">
-          <el-table-column prop="date" label="日期"> </el-table-column>
-          <el-table-column prop="name" label="姓名" width="180">
+      <el-tab-pane label="股票" name="shares" v-if="this.creditLevel == 1">
+        <el-table :data="shares" border style="width: 100%">
+          <el-table-column prop="stock_id" label="股票代号"> </el-table-column>
+          <el-table-column prop="stock_name" label="股票名称">
           </el-table-column>
-          <el-table-column prop="address" label="购买股数" width="180">
+          <el-table-column prop="issue_date" label="发行日期">
+          </el-table-column>
+          <el-table-column prop="issue_price" label="发行价格">
+          </el-table-column>
+          <el-table-column  label="购买股数" width="180">
             <template slot-scope="props">
               <el-input-number
                 size="small"
@@ -122,18 +147,15 @@
                 icon="el-icon-s-goods"
                 @onConfirm="buyShares(props.$index)"
               >
-              <el-button slot="reference"
-               
-                :disabled="!sharesNum[props.$index]"
-                >购买</el-button
-              >
+                <el-button slot="reference" :disabled="!sharesNum[props.$index]"
+                  >购买</el-button
+                >
               </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
       </el-tab-pane>
     </el-tabs>
-
   </div>
 </template>
 
@@ -142,6 +164,10 @@ export default {
   name: "Financing",
   data() {
     return {
+      ftfpAmount:[],
+      foundationAmount: [],
+      creditLevel: [],
+      date: [],
       dialogVisible: false,
       ftfpNum: [],
       foundationNum: [],
@@ -151,42 +177,139 @@ export default {
       ftfp: [],
       foundation: [],
       shares: [],
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
     };
   },
+  beforeMount() {
+    var myDate = new Date();
+    this.date =
+      myDate.getFullYear() +
+      "-" +
+      (myDate.getMonth() + 1) +
+      "-" +
+      myDate.getDate();
+    this.$axios
+      .get(
+        "/bts/investment/get_customer_credit?customer_id=" +
+          this.$store.state.customer_id
+      )
+      .then((resp) => {
+        if (resp.status === 200) {
+          this.creditLevel = resp.data.credit_level;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    this.$axios
+      .get("/bts/market/query_funds?product_id=" + -1)
+      .then((resp) => {
+        if (resp.status === 200) {
+          this.foundation = resp.data;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    this.$axios
+      .get("/bts/market/query_stocks?product_id=" + -1)
+      .then((resp) => {
+        if (resp.status === 200) {
+          this.shares = resp.data;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    this.$axios
+      .get("/bts/market/query_regular_deposits?product_id=" + -1)
+      .then((resp) => {
+        if (resp.status === 200) {
+          this.ftfp = resp.data;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
   methods: {
-    test(index) {
-      console.log(index);
-    },
     buyFtfp(index) {
-      console.log(this.ftfpNum[index]);
+      this.$axios
+        .post("/bts/investment/buy_regular_deposit", {
+          customer_id: this.$store.state.customer_id,
+          regular_deposit_id: this.ftfp[index].regular_deposit_id,
+          purchase_amount: this.ftfpAmount[index],
+          purchase_date: this.date,
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            this.$message({
+              message: "购买成功!",
+              type: "success",
+            });
+            location.reload();
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: error,
+            type: "error",
+            showClose: true,
+            duration: 0,
+          });
+        });
     },
     buyFoundation(index) {
-      console.log(this.foundationNum[index]);
+      this.$axios
+        .post("/bts/investment/buy_fund", {
+          customer_id: this.$store.state.customer_id,
+          fund_id: this.foundation[index].fund_id,
+          purchase_amount: this.foundationAmount[index],
+          purchase_date: this.date,
+          return_cycle: this.foundationNum[index]
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            this.$message({
+              message: "购买成功!",
+              type: "success",
+            });
+            location.reload();
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: error,
+            type: "error",
+            showClose: true,
+            duration: 0,
+          });
+        });
     },
     buyShares(index) {
-      console.log(this.sharesNum[index]);
+      this.$axios
+        .post("/bts/investment/buy_stock", {
+          customer_id: this.$store.state.customer_id,
+          stock_id: this.shares[index].stock_id,
+          new_position_share: this.sharesNum[index],
+          purchase_date: this.date,
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            this.$message({
+              message: "购买成功!",
+              type: "success",
+            });
+            location.reload();
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: error,
+            type: "error",
+            showClose: true,
+            duration: 0,
+          });
+        });
     },
   },
 };
