@@ -16,7 +16,7 @@ Vue.prototype.$axios = axios
 axios.defaults.baseURL = '/api'
 axios.defaults.withCredentials = true
 axios.defaults.headers.post['Content-Type'] = "application/json;charset=UTF-8"
-
+// axios.defaults.headers.post[]
 Vue.config.productionTip = false
 
 

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import Action from '@/components/Action'
 import Financing from '@/components/Financing'
 import MyFinancing from '@/components/MyFinancing'
 import Running from '@/components/Running'
@@ -20,7 +21,10 @@ export const router = new Router({
       path: '/login',
       name: 'Login',
       component: Login,
-    }, 
+      // meta: {
+      //   tag: "logged"
+      // }
+    },
     {
       path: '/register',
       name: 'Register',
@@ -33,6 +37,10 @@ export const router = new Router({
       // meta: {
       //   tag: "logged"
       // }
+    },{
+      path:'/action',
+      name:'Action',
+      component:Action
     },
     {
       path: '/MyFinancing',

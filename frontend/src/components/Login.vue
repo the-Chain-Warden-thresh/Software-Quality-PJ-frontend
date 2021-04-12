@@ -50,6 +50,8 @@
 </template>
 
 <script>
+  import * as qs from "qs";
+
   export default {
     name: 'Login',
     data() {
@@ -76,51 +78,52 @@
       login(formName) {
         this.$refs[formName].validate(valid => {
           if (valid) {
-            this.$axios.post('/login', {
-                username: this.loginForm.username,
+            this.$axios.post('/bts/system/login', {
+                account: this.loginForm.username,
                 password: this.loginForm.password
-              }
+              },{headers: {'Content-Type': 'application/json'}}
             )
               .then(resp => {
-                if (resp.status === 200 && resp.headers.hasOwnProperty("token")) {
-                  this.$message({
-                    message: 'Successful log in!',
-                    type: "success"
-                  });
-                  console.log(resp);
-
-                  const position=resp.data.authorities[0].authority;
-                  if(position==="doctor"){
-                    this.$router.push('/Doctor')
-                  }
-                  if(position==="emergencyNurse"){
-                    this.$router.push('/EmergencyNurse')
-                  }
-                  if(position==="matron"){
-                    this.$router.push('/Matron')
-                  }
-                  if(position==="wardNurse"){
-                    this.$router.push('/WardNurse')
-                  }
-                  console.log(resp.data.authorities[0].authority);
-                  this.$store.commit('login', resp.headers);
-                  this.$store.commit('setUserDetails', resp.data);
-                  // if (resp.data.authorities.length > 0 && resp.data.authorities[0].authority === "Admin") {
-                  //   this.$store.commit('setAdmin');
-                  //   this.$router.push('/ManagerAssessment');
-                  //
-                  // } else {
-                  //   this.$router.push('/personalInformation');
-                  // }
-                } else {
-                  this.$message({
-                    message: 'Login failed, please try again later!',
-                    type: "error",
-                    showClose: true,
-                    duration: 0,
-                  });
-                  this.$store.commit('logout');
-                }
+                console.log('success')
+                // if (resp.status === 200 && resp.headers.hasOwnProperty("token")) {
+                //   this.$message({
+                //     message: 'Successful log in!',
+                //     type: "success"
+                //   });
+                //   console.log(resp);
+                //
+                //   const position=resp.data.authorities[0].authority;
+                //   if(position==="doctor"){
+                //     this.$router.push('/Doctor')
+                //   }
+                //   if(position==="emergencyNurse"){
+                //     this.$router.push('/EmergencyNurse')
+                //   }
+                //   if(position==="matron"){
+                //     this.$router.push('/Matron')
+                //   }
+                //   if(position==="wardNurse"){
+                //     this.$router.push('/WardNurse')
+                //   }
+                //   console.log(resp.data.authorities[0].authority);
+                //   this.$store.commit('login', resp.headers);
+                //   this.$store.commit('setUserDetails', resp.data);
+                //   // if (resp.data.authorities.length > 0 && resp.data.authorities[0].authority === "Admin") {
+                //   //   this.$store.commit('setAdmin');
+                //   //   this.$router.push('/ManagerAssessment');
+                //   //
+                //   // } else {
+                //   //   this.$router.push('/personalInformation');
+                //   // }
+                // } else {
+                //   this.$message({
+                //     message: 'Login failed, please try again later!',
+                //     type: "error",
+                //     showClose: true,
+                //     duration: 0,
+                //   });
+                //   this.$store.commit('logout');
+                // }
               })
               .catch(error => {
                 this.$message({
